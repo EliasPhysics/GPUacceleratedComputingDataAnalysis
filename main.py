@@ -120,6 +120,15 @@ def plot_results(data_gpu, data_cpu, speedup_results_gpu, speedup_results_cpu):
         plt.grid()
         plt.savefig("gpu_par.png",dpi=300)
         plt.show()
+
+        plt.plot(p_speedup_gpu, S_predicted_gpu, 's--', label='GPU speedupd (Amdahl)')
+        plt.xlabel('Number of Nodes (p)')
+        plt.ylabel('Speedup')
+        plt.title("Amdahl's Law Analysis for CPU")
+        plt.legend()
+        plt.grid()
+        plt.savefig("gpu_speed.png",dpi=300)
+        plt.show()
     
     if data_cpu:
         p_values_cpu, t_total_cpu, t_reg_cpu, t_err_cpu, t_adjust_cpu, t_init_cpu = zip(*data_cpu)
@@ -142,6 +151,15 @@ def plot_results(data_gpu, data_cpu, speedup_results_gpu, speedup_results_cpu):
         plt.legend()
         plt.grid()
         plt.savefig("cpu_par.png",dpi=300)
+        plt.show()
+
+        plt.plot(p_speedup_cpu, S_predicted_cpu, 's--', label='CPU speedupd (Amdahl)')
+        plt.xlabel('Number of Nodes (p)')
+        plt.ylabel('Speedup')
+        plt.title("Amdahl's Law Analysis for CPU")
+        plt.legend()
+        plt.grid()
+        plt.savefig("cpu_speed.png",dpi=300)
         plt.show()
     
    
