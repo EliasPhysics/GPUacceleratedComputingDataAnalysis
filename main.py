@@ -88,10 +88,11 @@ def read_data(filename):
 
 def compute_speedup(data):
     speedup_results = []
+    t_seq = data[0][1]
     for p, t_total, t_reg, t_err, t_adjust, t_init in data:
         X = (t_reg + t_err + t_adjust + t_init) / t_total  # Compute X
         S_predicted = 1 / (1 - X + (X / p))  # Amdahl's law speedup
-        Tpar_p = 1 / S_predicted  # Parallel time prediction
+        Tpar_p = t_seq * 1 / S_predicted  # Parallel time prediction
         speedup_results.append((p, S_predicted, Tpar_p))
     return speedup_results
 
@@ -104,6 +105,7 @@ def plot_results(data_gpu, data_cpu, speedup_results_gpu, speedup_results_cpu):
         plt.plot(p_values_gpu, t_total_gpu, 'o-', label='GPU Total Time')
         plt.plot(p_values_gpu, t_reg_gpu, 'o-', label='GPU Reg Time')
         plt.plot(p_values_gpu, t_err_gpu, 'o-', label='GPU Irr Time')
+        plt.plot(p_values_gpu, Tpar_p_gpu,'s--',c="b",label='GPU Tpar Predicted (Amdahl)')
         plt.xlabel('Number of Nodes (p)')
         plt.ylabel('Time')
         plt.title("Amdahl's Law Analysis for GPU")
@@ -112,19 +114,12 @@ def plot_results(data_gpu, data_cpu, speedup_results_gpu, speedup_results_cpu):
         plt.savefig("gpu.png",dpi=300)
         plt.show()
 
-        plt.plot(p_values_gpu, Tpar_p_gpu, 's--', label='GPU Predicted (Amdahl)')
-        plt.xlabel('Number of Nodes (p)')
-        plt.ylabel('Par Time')
-        plt.title("Amdahl's Law Analysis for GPU")
-        plt.legend()
-        plt.grid()
-        plt.savefig("gpu_par.png",dpi=300)
-        plt.show()
+        
 
         plt.plot(p_speedup_gpu, S_predicted_gpu, 's--', label='GPU speedupd (Amdahl)')
         plt.xlabel('Number of Nodes (p)')
         plt.ylabel('Speedup')
-        plt.title("Amdahl's Law Analysis for CPU")
+        plt.title("Amdahl's Law Analysis for GPU")
         plt.legend()
         plt.grid()
         plt.savefig("gpu_speed.png",dpi=300)
@@ -136,6 +131,7 @@ def plot_results(data_gpu, data_cpu, speedup_results_gpu, speedup_results_cpu):
         plt.plot(p_values_cpu, t_total_cpu, 'o-', label='CPU Total Time')
         plt.plot(p_values_cpu, t_reg_cpu, 'o-', label='CPU Reg Time')
         plt.plot(p_values_cpu, t_err_cpu, 'o-', label='CPU Irr Time')
+        plt.plot(p_values_cpu, Tpar_p_cpu,'s--',c="b",label='CPU Tpar Predicted (Amdahl)')
         plt.xlabel('Number of Nodes (p)')
         plt.ylabel('Time ')
         plt.title("Amdahl's Law Analysis for CPU")
@@ -144,14 +140,6 @@ def plot_results(data_gpu, data_cpu, speedup_results_gpu, speedup_results_cpu):
         plt.savefig("cpu.png",dpi=300)
         plt.show()
 
-        plt.plot(p_values_cpu, Tpar_p_cpu, 's--', label='CPU Predicted (Amdahl)')
-        plt.xlabel('Number of Nodes (p)')
-        plt.ylabel('Par Time')
-        plt.title("Amdahl's Law Analysis for CPU")
-        plt.legend()
-        plt.grid()
-        plt.savefig("cpu_par.png",dpi=300)
-        plt.show()
 
         plt.plot(p_speedup_cpu, S_predicted_cpu, 's--', label='CPU speedupd (Amdahl)')
         plt.xlabel('Number of Nodes (p)')
