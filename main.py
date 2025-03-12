@@ -89,8 +89,10 @@ def read_data(filename):
 def compute_speedup(data):
     speedup_results = []
     t_seq = data[0][1]
+    p, t_total, t_reg, t_err, t_adjust, t_init = data[0]
+    X = (t_reg + t_err + t_adjust + t_init) / t_total  # Compute X
+
     for p, t_total, t_reg, t_err, t_adjust, t_init in data:
-        X = (t_reg + t_err + t_adjust + t_init) / t_total  # Compute X
         S_predicted = 1 / (1 - X + (X / p))  # Amdahl's law speedup
         Tpar_p = t_seq * 1 / S_predicted  # Parallel time prediction
         speedup_results.append((p, S_predicted, Tpar_p))
